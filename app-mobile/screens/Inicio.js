@@ -25,6 +25,10 @@ export default function Inicio({ navigation }) {
           setRetos([]);
         }
         setLoading(false);
+      }, (error) => {
+        console.error("Error al escuchar cambios en Firebase:", error);
+        setRetos([]);
+        setLoading(false);
       });
       
       // Cleanup de la suscripción al desmontar el componente

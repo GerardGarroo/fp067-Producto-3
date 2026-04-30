@@ -4,6 +4,7 @@ import { getDatabase } from 'firebase/database';
 const firebaseConfig = {
   apiKey: "AIzaSyAFQKbBSAhnpMv2A5A8THGqhHZFmNXP6Z0",
   authDomain: "producto-2-fp067.firebaseapp.com",
+  databaseURL: "https://producto-2-fp067-default-rtdb.firebaseio.com",
   projectId: "producto-2-fp067",
   storageBucket: "producto-2-fp067.firebasestorage.app",
   messagingSenderId: "583706100820",
