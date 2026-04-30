@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 
-// Importamos el archivo de configuración para asegurar que Firebase se inicialice
-import '../firebaseConfig';
-// Utilizamos el SDK modular web de Firebase (o react-native-firebase si está linkeado nativamente)
-import { getDatabase, ref, onValue } from 'firebase/database';
-// Import alternativo si usan react-native-firebase:
-// import database from '@react-native-firebase/database';
+// Usamos el SDK web de Firebase y nuestra configuración
+import { db } from '../firebaseConfig';
+import { ref, onValue } from 'firebase/database';
 
 export default function Inicio({ navigation }) {
   const [retos, setRetos] = useState([]);
@@ -14,8 +11,7 @@ export default function Inicio({ navigation }) {
 
   useEffect(() => {
     try {
-      // Intento con SDK Web modular
-      const db = getDatabase();
+      // Usamos db importado correctamente desde firebaseConfig
       const retosRef = ref(db, 'retos');
       const unsubscribe = onValue(retosRef, (snapshot) => {
         const data = snapshot.val();
@@ -30,30 +26,12 @@ export default function Inicio({ navigation }) {
         }
         setLoading(false);
       });
+      
+      // Cleanup de la suscripción al desmontar el componente
       return () => unsubscribe();
-    } catch (e) {
-      console.log("Aviso: Falló la inicialización web. Intentando con @react-native-firebase...", e);
-      try {
-        // Fallback a react-native-firebase si es lo que configuraron
-        const database = require('@react-native-firebase/database').default;
-        const onValueChange = database().ref('/retos').on('value', snapshot => {
-          const data = snapshot.val();
-          if (data) {
-            const retosArray = Object.keys(data).map(key => ({
-              id: key,
-              ...data[key],
-            }));
-            setRetos(retosArray);
-          } else {
-            setRetos([]);
-          }
-          setLoading(false);
-        });
-        return () => database().ref('/retos').off('value', onValueChange);
-      } catch (err) {
-        console.error("Error definitivo al cargar firebase:", err);
-        setLoading(false);
-      }
+    } catch (err) {
+      console.error("Error al cargar firebase:", err);
+      setLoading(false);
     }
   }, []);
 
