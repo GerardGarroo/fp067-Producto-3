@@ -1,4 +1,4 @@
-# App NBA - Entrega Final
+# App NBA
 
 ## Instrucciones para ejecutar:
 1. Clonar el repositorio.
